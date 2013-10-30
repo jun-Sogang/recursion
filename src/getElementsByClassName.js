@@ -3,7 +3,21 @@
 //   return document.getElementsByClassName(className);
 // };
 
-// But in stead we're going to implement it from scratch:
+// But instead we're going to implement it from scratch:
 var getElementsByClassName = function (className) {
-  // your code here
+	var result = [];
+	var searchDOM = function (element) {
+		var children = element.childNodes;
+		for (var i = 0; i < children.length; i++) {
+			var childNode = children[i];
+			if (childNode.classList && childNode.classList.contains(className)) {
+				result.push(childNode);
+			}
+			else {
+			searchDOM(childNode);
+			}
+		}
+	};
+	searchDOM(document.body);
+	return result;
 };
