@@ -10,12 +10,7 @@ var getElementsByClassName = function (className) {
 		var children = element.childNodes;
 		for (var i = 0; i < children.length; i++) {
 			var childNode = children[i];
-			if (childNode.classList && childNode.classList.contains(className)) {
-				result.push(childNode);
-			}
-			else {
-			searchDOM(childNode);
-			}
+			childNode.classList && childNode.classList.contains(className) ? result.push(childNode) : searchDOM(childNode);
 		}
 	};
 	searchDOM(document.body);
