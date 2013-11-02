@@ -17,14 +17,41 @@ var parseJSON = function (json) {
   	}
   };
 
-  	var string = function() {
-  		var result = '';
-  		while (ca != undefined) {
-  			result += ca;
-  			next();
-  		}
-  	};
+  var string = function() {
+  	var result = '';
+  	if (ca === '"') {
+  		next();
+  	}
+  	while (ca != undefined && ca != '"') {
+  		result += ca;
+  		next();
+  	}
+  	return result;
   };
 
+  var number = function() {
+  	var result = '';
+  	if (ca === '-') {
+  		result = '-';
+  		next();
+  	}
+  	while (ca >= 0 && ca <= 9 || ca === '.') {
+	  	result += ca;
+	  	next();
+	}
+	result = +result;  
+  	return result;
+  };
 
+  var type = function(json) {
+	  if (ca  === '"') {
+	  	return string();
+	  }
+
+	  if (ca === "-" || ca >= 0 && ca <= 9) {
+	  	return number();
+	  }
+  };
+
+  return type(json);
 };
