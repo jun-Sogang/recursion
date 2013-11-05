@@ -15,17 +15,23 @@ var parseJSON = function (json) {
   	else {
   		ca = undefined;
   	}
-  	return ca;
+  };
+
+  var space = function() {
+  	while (ca === ' ') {
+  		next();
+  	}
   };
 
   var string = function() {
   	var result = '';
-  	if (ca === '"') {
-  		next();
-  	}
+  	next(); 	
 
   	while (ca != undefined && ca != '"') {
   		result += ca;
+  		next();
+  	}
+  	if (ca === '"') {
   		next();
   	}
 
@@ -47,7 +53,7 @@ var parseJSON = function (json) {
   };
 
   var word = function() {
-  	// I'm not really in love with this method, but it's the only one
+  	// I'm not really in love with this method, but it's the only
   	// way I could get it to parse correctly.
   	if (ca === 't') {
   		next();
@@ -90,6 +96,27 @@ var parseJSON = function (json) {
   	}
   };
 
+  var array = function() {
+  	var result = [];
+    if (ca === '[') {
+    	next();
+        space();
+        if (ca === ']') {
+        	next();
+            return result; 
+        }
+        while (ca != undefined) {
+        	result.push(type());
+            if (ca === ']') {
+                next();
+                return result;
+            }
+            next();
+            space();
+        }
+    }     
+  };
+
   var type = function(json) {
   	if (ca === 't' || ca === 'f' || ca === 'n') {
 	  return word();
@@ -97,9 +124,11 @@ var parseJSON = function (json) {
 	if (ca  === '"') {
 	  return string();
 	}
-
 	if (ca === "-" || ca >= 0 && ca <= 9) {
 	  return number();
+	}
+	if (ca === '[') {
+		return array();
 	}
   };
 
