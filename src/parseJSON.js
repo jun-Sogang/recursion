@@ -9,12 +9,13 @@ var parseJSON = function (json) {
 
   var next = function() {
   	if (index < json.length - 1) {
-  		ca = json.charAt(index + 1)
+  		ca = json.charAt(index + 1);
   		index += 1;
   	}
   	else {
   		ca = undefined;
   	}
+  	return ca;
   };
 
   var string = function() {
@@ -22,10 +23,12 @@ var parseJSON = function (json) {
   	if (ca === '"') {
   		next();
   	}
+
   	while (ca != undefined && ca != '"') {
   		result += ca;
   		next();
   	}
+
   	return result;
   };
 
@@ -43,14 +46,61 @@ var parseJSON = function (json) {
   	return result;
   };
 
-  var type = function(json) {
-	  if (ca  === '"') {
-	  	return string();
-	  }
+  var word = function() {
+  	// I'm not really in love with this method, but it's the only one
+  	// way I could get it to parse correctly.
+  	if (ca === 't') {
+  		next();
+  		if (ca === 'r') {
+  			next();
+  			if (ca === 'u') {
+  				next();
+  				if (ca === 'e') {
+  					return true;
+  				}
+  			}
+  		}
+  	}
+  	if (ca === 'f') {
+  		next();
+  		if (ca === 'a') {
+  			next();
+  			if (ca === 'l') {
+  				next();
+  				if (ca === 's') {
+  					next();
+  					if (ca === 'e') {
+  						return false;
+  					}
+  				}
+  			}
+  		}
+  	}
+  	if (ca === 'n') {
+  		next();
+  		if (ca === 'u') {
+  			next();
+  			if (ca === 'l') {
+  				next();
+  				if (ca === 'l') {
+  					return null;
+  				}
+  			}
+  		}
+  	}
+  };
 
-	  if (ca === "-" || ca >= 0 && ca <= 9) {
-	  	return number();
-	  }
+  var type = function(json) {
+  	if (ca === 't' || ca === 'f' || ca === 'n') {
+	  return word();
+	}
+	if (ca  === '"') {
+	  return string();
+	}
+
+	if (ca === "-" || ca >= 0 && ca <= 9) {
+	  return number();
+	}
   };
 
   return type(json);
