@@ -62,6 +62,7 @@ var parseJSON = function (json) {
   			if (ca === 'u') {
   				next();
   				if (ca === 'e') {
+  					next();
   					return true;
   				}
   			}
@@ -76,6 +77,7 @@ var parseJSON = function (json) {
   				if (ca === 's') {
   					next();
   					if (ca === 'e') {
+  						next();
   						return false;
   					}
   				}
@@ -89,6 +91,7 @@ var parseJSON = function (json) {
   			if (ca === 'l') {
   				next();
   				if (ca === 'l') {
+  					next();
   					return null;
   				}
   			}
@@ -117,6 +120,34 @@ var parseJSON = function (json) {
     }     
   };
 
+  var object = function() {
+  	var result = {};
+  	var key = '';
+  	if (ca === '{') {
+  		next();
+  		space();
+  		if (ca === '}') {
+  			next();
+  			return result;
+  		}
+  		while (ca != undefined) {
+  			if (ca === ',' || ca === ':') {
+  				next();
+  				space();
+  			} 
+	  			key = type();
+	  			next();
+	  			space();
+	  			result[key] = type();
+	  			space();
+	 			if (ca === '}') {
+	  				next();
+	  				return result;
+	  			}		
+  		}
+  	}
+  };
+
   var type = function(json) {
   	if (ca === 't' || ca === 'f' || ca === 'n') {
 	  return word();
@@ -129,6 +160,9 @@ var parseJSON = function (json) {
 	}
 	if (ca === '[') {
 		return array();
+	}
+	if (ca === '{') {
+		return object();
 	}
   };
 
