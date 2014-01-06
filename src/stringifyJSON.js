@@ -7,7 +7,10 @@ var stringifyJSON = function (obj) {
     return '"' + obj + '"';
   }
   if(Array.isArray(obj)){
-    return "[]";
+    return "["+ obj.map(function(item){
+      return stringifyJSON(item);
+    }).join(",") + "]";
   }
   return "" + obj;
+
 };
