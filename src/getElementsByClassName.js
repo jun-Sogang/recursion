@@ -6,13 +6,16 @@
 // But instead we're going to implement it from scratch:
 var getElementsByClassName = function (className) {
 	var result = [];
-	var searchDOM = function (element) {
-		var children = element.childNodes;
-		for (var i = 0; i < children.length; i++) {
-			var childNode = children[i];
-			childNode.classList && childNode.classList.contains(className) ? result.push(childNode) : searchDOM(childNode);
+	var hasClass = function(node) {
+		var children = node.childNodes;
+		for(var i = 0 ; i < children.length; i ++){
+			if (children[i].classList && children[i].classList.contains(className)) {
+				result.push(children[i]);
+			}else{
+				hasClass(children[i]);
+			}
 		}
 	};
-	searchDOM(document.body);
+	hasClass(document.body);
 	return result;
 };
