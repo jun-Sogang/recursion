@@ -7,12 +7,12 @@
 var getElementsByClassName = function (className) {
 	var result = [];
 	var hasClass = function(node) {
-		var children = node.childNodes;
-		for(var i = 0 ; i < children.length; i ++){
-			if (children[i].classList && children[i].classList.contains(className)) {
-				result.push(children[i]);
+		for(var i = 0 ; i < node.childNodes.length; i ++){
+			var children = node.childNodes[i];
+			if (children.classList && children.classList.contains(className)) {
+				result.push(children);
 			}else{
-				hasClass(children[i]);
+				hasClass(children);
 			}
 		}
 	};
